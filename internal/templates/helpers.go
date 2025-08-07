@@ -1,12 +1,26 @@
 package templates
 
 import (
+	"fmt"
 	"strconv"
 )
 
 // Helper function to convert int to string for templ
 func intToString(i int) string {
 	return strconv.Itoa(i)
+}
+
+// Helper function to format duration in seconds to human readable format
+func formatDuration(seconds int) string {
+	if seconds < 60 {
+		return fmt.Sprintf("%ds", seconds)
+	}
+	minutes := seconds / 60
+	remainingSeconds := seconds % 60
+	if remainingSeconds == 0 {
+		return fmt.Sprintf("%dm", minutes)
+	}
+	return fmt.Sprintf("%dm %ds", minutes, remainingSeconds)
 }
 
 // Helper function to get CSS classes for note type badges

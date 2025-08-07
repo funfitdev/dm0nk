@@ -19,3 +19,15 @@ type NotesResponse struct {
 	HasMore bool   `json:"has_more"`
 	Offset  int    `json:"offset"`
 }
+
+type Recording struct {
+	ID               string    `json:"id"`
+	Filename         string    `json:"filename"`
+	OriginalFilename string    `json:"original_filename"`
+	FileSize         int64     `json:"file_size"`
+	Duration         int       `json:"duration"` // in seconds
+	MimeType         string    `json:"mime_type"`
+	FilePath         string    `json:"file_path"`
+	CreatedAt        time.Time `json:"created_at"`
+	UpdatedAt        time.Time `json:"updated_at"`
+}

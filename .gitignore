@@ -79,3 +79,5 @@ yarn-debug.log*
 yarn-error.log*
 dont-commit.md
 dm0nk
+static/app.css
+recordings/*

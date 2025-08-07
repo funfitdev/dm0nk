@@ -24,12 +24,17 @@ func main() {
 	r.Use(middleware.Recoverer)
 
 	// Routes
-	r.Get("/", handlers.NotesIndex)
-	r.Get("/home", handlers.Home)
+	r.Get("/", handlers.Home)
+	r.Get("/notes", handlers.NotesIndex)
 	r.Get("/about", handlers.About)
 	r.Get("/page-1", handlers.Page1)
 	r.Get("/page-2", handlers.Page2)
+	r.Get("/recordings", handlers.RecordingsIndex)
+
+	// API routes
 	r.Get("/api/notes", handlers.ApiNotes)
+	r.Post("/api/recordings", handlers.UploadRecording)
+	r.Get("/api/recordings/*", handlers.ServeRecording)
 
 	// Static files
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
