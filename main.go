@@ -27,6 +27,8 @@ func main() {
 	r.Get("/", handlers.NotesIndex)
 	r.Get("/home", handlers.Home)
 	r.Get("/about", handlers.About)
+	r.Get("/page-1", handlers.Page1)
+	r.Get("/page-2", handlers.Page2)
 	r.Get("/api/notes", handlers.ApiNotes)
 
 	// Static files

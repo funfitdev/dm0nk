@@ -16,3 +16,16 @@ POST Create \notes
 PUT Update \notes\{id}
 DELETE Delete \notes\{id}
 ```
+
+<div hx-get={handleOnClick} />
+<div hx-post={handleOnClick} />
+
+Receive Query
+Generate HTML payload following htmx specification adding behavior
+
+- strike
+- toggle
+- rearrange
+- tap
+- longpress
+- fling

@@ -26,6 +26,8 @@ templ Layout(title string) {
 							<div class="hidden md:block ml-10">
 								<div class="flex items-baseline space-x-4">
 									<a href="/" class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Notes</a>
+									<a href="/page-1" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Page 1</a>
+									<a href="/page-2" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Page 2</a>
 									<a href="/about" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">About</a>
 								</div>
 							</div>
@@ -36,6 +38,12 @@ templ Layout(title string) {
 			<main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
 				{ children... }
 			</main>
+			<script>
+				// Simple script for view transitions - no complex direction detection needed
+				document.addEventListener('DOMContentLoaded', function() {
+					console.log('View Transition API ready - using gentle fade transitions');
+				});
+			</script>
 		</body>
 	</html>
 }
@@ -321,4 +329,147 @@ templ BirthdaysPreview(data []byte) {
 		<p class="text-gray-600">🎂 Birthdays</p>
 		<div class="text-xs text-gray-500">Birthday reminders</div>
 	</div>
+}
+
+templ Page1() {
+	@Layout("Page 1 - dm0nk") {
+		<div class="px-4 py-8">
+			<div class="max-w-4xl mx-auto">
+				<!-- Header -->
+				<div class="text-center mb-12" style="view-transition-name: shared-hero;">
+					<h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4" style="view-transition-name: shared-title;">Page One</h1>
+					<p class="text-xl text-gray-600 max-w-2xl mx-auto">Demonstrating smooth fade transitions with shared elements.</p>
+				</div>
+				<!-- Navigation -->
+				<div class="flex justify-center space-x-4 mb-12">
+					<a href="/" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200">
+						← Back to Notes
+					</a>
+					<a href="/page-2" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200">
+						Go to Page 2 →
+					</a>
+				</div>
+				<!-- Content -->
+				<div class="grid md:grid-cols-2 gap-8">
+					<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" style="view-transition-name: content-card-1;">
+						<h2 class="text-2xl font-semibold text-gray-900 mb-4">Gentle Transitions</h2>
+						<p class="text-gray-600 mb-4">
+							Simple fade transitions that are easy on the eyes. No jarring movements or complex animations.
+							Just smooth, peaceful changes between pages.
+						</p>
+						<ul class="space-y-2 text-sm text-gray-600">
+							<li>• Gentle fade in/out</li>
+							<li>• Shared element animation</li>
+							<li>• Smooth and soothing</li>
+							<li>• No jarring effects</li>
+						</ul>
+					</div>
+					<div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-6">
+						<h3 class="text-xl font-semibold text-gray-900 mb-4">Features</h3>
+						<div class="space-y-3">
+							<div class="flex items-center space-x-3">
+								<div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+									<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+									</svg>
+								</div>
+								<span class="text-gray-700">Peaceful fade transitions</span>
+							</div>
+							<div class="flex items-center space-x-3">
+								<div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+									<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+									</svg>
+								</div>
+								<span class="text-gray-700">Shared element animations</span>
+							</div>
+							<div class="flex items-center space-x-3">
+								<div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+									<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+									</svg>
+								</div>
+								<span class="text-gray-700">Modern browser API</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}
+
+templ Page2() {
+	@Layout("Page 2 - dm0nk") {
+		<div class="px-4 py-8">
+			<div class="max-w-4xl mx-auto">
+				<!-- Header -->
+				<div class="text-center mb-12" style="view-transition-name: shared-hero;">
+					<h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4" style="view-transition-name: shared-title;">Page Two</h1>
+					<p class="text-xl text-gray-600 max-w-2xl mx-auto">Experience gentle fade transitions with shared element animations.</p>
+				</div>
+				<!-- Navigation -->
+				<div class="flex justify-center space-x-4 mb-12">
+					<a href="/page-1" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200">
+						← Back to Page 1
+					</a>
+					<a href="/" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200">
+						Back to Notes
+					</a>
+				</div>
+				<!-- Content -->
+				<div class="space-y-8">
+					<!-- Hero Card -->
+					<div class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl p-8 text-white" style="view-transition-name: content-card-1;">
+						<h2 class="text-3xl font-bold mb-4">Peaceful Transitions</h2>
+						<p class="text-lg opacity-90 mb-6">
+							Gentle fade effects that create a calm, soothing user experience. No harsh movements,
+							just smooth and peaceful navigation between pages.
+						</p>
+						<div class="flex space-x-4">
+							<div class="bg-white/20 rounded-lg p-4 flex-1">
+								<h3 class="font-semibold mb-2">Gentle Fade</h3>
+								<p class="text-sm opacity-80">Smooth opacity transitions</p>
+							</div>
+							<div class="bg-white/20 rounded-lg p-4 flex-1">
+								<h3 class="font-semibold mb-2">Shared Elements</h3>
+								<p class="text-sm opacity-80">Connected animated components</p>
+							</div>
+						</div>
+					</div>
+					<!-- Feature Grid -->
+					<div class="grid md:grid-cols-3 gap-6">
+						<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
+							<div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+								<svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+								</svg>
+							</div>
+							<h3 class="text-lg font-semibold text-gray-900 mb-2">Fast</h3>
+							<p class="text-gray-600 text-sm">Hardware-accelerated transitions</p>
+						</div>
+						<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
+							<div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+								<svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+								</svg>
+							</div>
+							<h3 class="text-lg font-semibold text-gray-900 mb-2">Smooth</h3>
+							<p class="text-gray-600 text-sm">Seamless page transitions</p>
+						</div>
+						<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
+							<div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+								<svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+								</svg>
+							</div>
+							<h3 class="text-lg font-semibold text-gray-900 mb-2">Modern</h3>
+							<p class="text-gray-600 text-sm">Latest web standards</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
 }

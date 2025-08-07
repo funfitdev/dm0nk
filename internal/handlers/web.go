@@ -45,3 +45,13 @@ func About(w http.ResponseWriter, r *http.Request) {
 	component := templates.AboutPage("About dm0nk", "This is a Go web server using templ and chi router.")
 	component.Render(r.Context(), w)
 }
+
+func Page1(w http.ResponseWriter, r *http.Request) {
+	component := templates.Page1()
+	component.Render(r.Context(), w)
+}
+
+func Page2(w http.ResponseWriter, r *http.Request) {
+	component := templates.Page2()
+	component.Render(r.Context(), w)
+}
