@@ -28,6 +28,7 @@ type Recording struct {
 	Duration         int       `json:"duration"` // in seconds
 	MimeType         string    `json:"mime_type"`
 	FilePath         string    `json:"file_path"`
+	ExtractedText    *string   `json:"extracted_text"` // nullable
 	CreatedAt        time.Time `json:"created_at"`
 	UpdatedAt        time.Time `json:"updated_at"`
 }

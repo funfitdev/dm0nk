@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -13,6 +14,7 @@ import (
 
 	"dm0nk/internal/database"
 	"dm0nk/internal/models"
+	"dm0nk/internal/services"
 	"dm0nk/internal/templates"
 )
 
@@ -123,6 +125,22 @@ func UploadRecording(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Close the file before transcription
+	dst.Close()
+
+	// Initialize Deepgram service and transcribe audio
+	deepgramService := services.NewDeepgramService()
+	var extractedText *string
+	if deepgramService != nil {
+		transcript, err := deepgramService.TranscribeFile(r.Context(), filepath)
+		if err != nil {
+			log.Printf("Failed to transcribe audio: %v", err)
+			// Continue without transcription - don't fail the upload
+		} else if transcript != "" {
+			extractedText = &transcript
+		}
+	}
+
 	// Save recording info to database
 	recording := &models.Recording{
 		Filename:         filename,
@@ -131,6 +149,7 @@ func UploadRecording(w http.ResponseWriter, r *http.Request) {
 		Duration:         0, // We'll calculate this later if needed
 		MimeType:         "audio/wav",
 		FilePath:         filepath,
+		ExtractedText:    extractedText,
 	}
 
 	err = database.CreateRecording(r.Context(), recording)

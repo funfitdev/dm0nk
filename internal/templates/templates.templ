@@ -732,6 +732,23 @@ templ RecordingCard(recording models.Recording) {
 				</a>
 			</div>
 		</div>
+		<!-- Transcription -->
+		if recording.ExtractedText != nil && *recording.ExtractedText != "" {
+			<div class="mt-4 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+				<div class="flex items-center gap-2 mb-2">
+					<i data-lucide="message-circle" class="w-4 h-4 text-blue-600"></i>
+					<span class="text-sm font-medium text-blue-800">Transcription</span>
+				</div>
+				<p class="text-gray-700 text-sm leading-relaxed">{ *recording.ExtractedText }</p>
+			</div>
+		} else {
+			<div class="mt-4 p-3 bg-gray-50 rounded-lg border-l-4 border-gray-300">
+				<div class="flex items-center gap-2">
+					<i data-lucide="clock" class="w-4 h-4 text-gray-500"></i>
+					<span class="text-sm text-gray-600">Transcription not available</span>
+				</div>
+			</div>
+		}
 		<!-- Audio Player (hidden by default) -->
 		<div id={ "player-" + recording.Filename } class="mt-4 hidden">
 			<audio controls class="w-full" preload="none">

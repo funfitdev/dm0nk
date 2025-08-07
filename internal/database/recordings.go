@@ -9,7 +9,7 @@ import (
 // GetRecordings retrieves all recordings ordered by creation date (newest first)
 func GetRecordings(ctx context.Context) ([]models.Recording, error) {
 	query := `
-		SELECT id, filename, original_filename, file_size, duration, mime_type, file_path, created_at, updated_at
+		SELECT id, filename, original_filename, file_size, duration, mime_type, file_path, extracted_text, created_at, updated_at
 		FROM recordings
 		ORDER BY created_at DESC
 	`
@@ -31,6 +31,7 @@ func GetRecordings(ctx context.Context) ([]models.Recording, error) {
 			&recording.Duration,
 			&recording.MimeType,
 			&recording.FilePath,
+			&recording.ExtractedText,
 			&recording.CreatedAt,
 			&recording.UpdatedAt,
 		)
@@ -50,8 +51,8 @@ func GetRecordings(ctx context.Context) ([]models.Recording, error) {
 // CreateRecording inserts a new recording into the database
 func CreateRecording(ctx context.Context, recording *models.Recording) error {
 	query := `
-		INSERT INTO recordings (filename, original_filename, file_size, duration, mime_type, file_path)
-		VALUES ($1, $2, $3, $4, $5, $6)
+		INSERT INTO recordings (filename, original_filename, file_size, duration, mime_type, file_path, extracted_text)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING id, created_at, updated_at
 	`
 
@@ -62,6 +63,7 @@ func CreateRecording(ctx context.Context, recording *models.Recording) error {
 		recording.Duration,
 		recording.MimeType,
 		recording.FilePath,
+		recording.ExtractedText,
 	).Scan(&recording.ID, &recording.CreatedAt, &recording.UpdatedAt)
 
 	if err != nil {
@@ -74,7 +76,7 @@ func CreateRecording(ctx context.Context, recording *models.Recording) error {
 // GetRecordingByFilename retrieves a recording by its filename
 func GetRecordingByFilename(ctx context.Context, filename string) (*models.Recording, error) {
 	query := `
-		SELECT id, filename, original_filename, file_size, duration, mime_type, file_path, created_at, updated_at
+		SELECT id, filename, original_filename, file_size, duration, mime_type, file_path, extracted_text, created_at, updated_at
 		FROM recordings
 		WHERE filename = $1
 	`
@@ -88,6 +90,7 @@ func GetRecordingByFilename(ctx context.Context, filename string) (*models.Recor
 		&recording.Duration,
 		&recording.MimeType,
 		&recording.FilePath,
+		&recording.ExtractedText,
 		&recording.CreatedAt,
 		&recording.UpdatedAt,
 	)
