@@ -1,4 +1,4 @@
-package main
+package database
 
 import (
 	"context"
@@ -9,9 +9,9 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var db *pgx.Conn
+var DB *pgx.Conn
 
-func initDB() {
+func InitDB() {
 	// Load environment variables
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found, using environment variables")
@@ -25,21 +25,21 @@ func initDB() {
 
 	// Connect to database
 	var err error
-	db, err = pgx.Connect(context.Background(), databaseURL)
+	DB, err = pgx.Connect(context.Background(), databaseURL)
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
 	// Test connection
-	if err := db.Ping(context.Background()); err != nil {
+	if err := DB.Ping(context.Background()); err != nil {
 		log.Fatal("Failed to ping database:", err)
 	}
 
 	log.Println("Connected to database successfully")
 }
 
-func closeDB() {
-	if db != nil {
-		db.Close(context.Background())
+func CloseDB() {
+	if DB != nil {
+		DB.Close(context.Background())
 	}
 }
