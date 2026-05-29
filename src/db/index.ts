@@ -1,14 +1,14 @@
-import { drizzle } from "drizzle-orm/bun-sqlite";
-import { migrate } from "drizzle-orm/bun-sqlite/migrator";
-import { Database } from "bun:sqlite";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
+import postgres from "postgres";
 import * as schema from "@/db/schema.ts";
 
-const sqlite = new Database(process.env.DB_PATH ?? "cms.db", { create: true });
-sqlite.run("PRAGMA journal_mode = WAL");
-sqlite.run("PRAGMA foreign_keys = ON");
+const url = process.env.DATABASE_URL;
+if (!url) throw new Error("DATABASE_URL is not set");
 
-const db = drizzle(sqlite, { schema });
+const client = postgres(url);
+const db = drizzle(client, { schema });
 
-migrate(db, { migrationsFolder: "./drizzle" });
+await migrate(db, { migrationsFolder: "./drizzle" });
 
 export default db;

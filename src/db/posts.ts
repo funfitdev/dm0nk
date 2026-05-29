@@ -5,53 +5,59 @@ import { eq, desc, and, sql } from "drizzle-orm";
 export type Post = typeof posts.$inferSelect;
 export type PostMeta = typeof postMeta.$inferSelect;
 
-export function getAllPosts(): Post[] {
-  return db.select().from(posts).orderBy(desc(posts.created_at)).all();
+export async function getAllPosts(): Promise<Post[]> {
+  return db.select().from(posts).orderBy(desc(posts.created_at));
 }
 
-export function getPublishedPosts(): Post[] {
+export async function getPublishedPosts(): Promise<Post[]> {
   return db
     .select()
     .from(posts)
-    .where(eq(posts.published, 1))
-    .orderBy(desc(posts.created_at))
-    .all();
+    .where(eq(posts.published, true))
+    .orderBy(desc(posts.created_at));
 }
 
-export function findBySlug(slug: string): Post | null {
-  return db.select().from(posts).where(eq(posts.slug, slug)).get() ?? null;
+export async function findBySlug(slug: string): Promise<Post | null> {
+  const [row] = await db.select().from(posts).where(eq(posts.slug, slug));
+  return row ?? null;
 }
 
-export function findById(id: number): Post | null {
-  return db.select().from(posts).where(eq(posts.id, id)).get() ?? null;
+export async function findById(id: number): Promise<Post | null> {
+  const [row] = await db.select().from(posts).where(eq(posts.id, id));
+  return row ?? null;
 }
 
-export function createPost(data: {
+export async function createPost(data: {
   user_id: number;
   title: string;
   slug: string;
   content: string;
-  published?: number;
-}): Post {
-  return db
+  published?: boolean;
+}): Promise<Post> {
+  const [row] = await db
     .insert(posts)
     .values({
       user_id: data.user_id,
       title: data.title,
       slug: data.slug,
       content: data.content,
-      published: data.published ?? 0,
+      published: data.published ?? false,
     })
-    .returning()
-    .get();
+    .returning();
+  return row!;
 }
 
-export function updatePost(
+export async function updatePost(
   id: number,
-  data: { title?: string; slug?: string; content?: string; published?: number },
-): Post | null {
+  data: {
+    title?: string;
+    slug?: string;
+    content?: string;
+    published?: boolean;
+  },
+): Promise<Post | null> {
   const setValues: Record<string, unknown> = {
-    updated_at: sql`datetime('now')`,
+    updated_at: sql`now()`,
   };
   if (data.title !== undefined) setValues.title = data.title;
   if (data.slug !== undefined) setValues.slug = data.slug;
@@ -60,33 +66,39 @@ export function updatePost(
 
   if (Object.keys(setValues).length === 1) return findById(id);
 
-  return (
-    db.update(posts).set(setValues).where(eq(posts.id, id)).returning().get() ??
-    null
-  );
+  const [row] = await db
+    .update(posts)
+    .set(setValues)
+    .where(eq(posts.id, id))
+    .returning();
+  return row ?? null;
 }
 
-export function deletePost(id: number): void {
-  db.delete(posts).where(eq(posts.id, id)).run();
+export async function deletePost(id: number): Promise<void> {
+  await db.delete(posts).where(eq(posts.id, id));
 }
 
 // Post Meta
-export function getMeta(postId: number): PostMeta[] {
-  return db.select().from(postMeta).where(eq(postMeta.post_id, postId)).all();
+export async function getMeta(postId: number): Promise<PostMeta[]> {
+  return db.select().from(postMeta).where(eq(postMeta.post_id, postId));
 }
 
-export function setMeta(postId: number, key: string, value: string): void {
-  db.insert(postMeta)
+export async function setMeta(
+  postId: number,
+  key: string,
+  value: string,
+): Promise<void> {
+  await db
+    .insert(postMeta)
     .values({ post_id: postId, meta_key: key, meta_value: value })
     .onConflictDoUpdate({
       target: [postMeta.post_id, postMeta.meta_key],
       set: { meta_value: value },
-    })
-    .run();
+    });
 }
 
-export function deleteMeta(postId: number, key: string): void {
-  db.delete(postMeta)
-    .where(and(eq(postMeta.post_id, postId), eq(postMeta.meta_key, key)))
-    .run();
+export async function deleteMeta(postId: number, key: string): Promise<void> {
+  await db
+    .delete(postMeta)
+    .where(and(eq(postMeta.post_id, postId), eq(postMeta.meta_key, key)));
 }

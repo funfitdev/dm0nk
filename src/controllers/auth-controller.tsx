@@ -25,14 +25,14 @@ export async function login(req: Request) {
     );
   }
 
-  const user = findByUsername(username);
+  const user = await findByUsername(username);
   if (!user || !verifyPassword(user, password)) {
     return render(
       <AuthView.Login theme={theme} error="Invalid username or password." />,
     );
   }
 
-  const session = createSession(user.id);
+  const session = await createSession(user.id);
   return new Response(null, {
     status: 303,
     headers: {
@@ -45,7 +45,7 @@ export async function login(req: Request) {
 export async function logout(req: Request) {
   const cookies = parseCookie(req.headers.get("Cookie") || "");
   if (cookies.session) {
-    deleteSession(cookies.session);
+    await deleteSession(cookies.session);
   }
   return new Response(null, {
     status: 303,

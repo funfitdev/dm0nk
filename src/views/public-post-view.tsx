@@ -33,9 +33,9 @@ export function Show({
               {post.title}
             </h1>
             <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-              Published {post.created_at.slice(0, 10)}
-              {post.updated_at !== post.created_at &&
-                ` · Updated ${post.updated_at.slice(0, 10)}`}
+              Published {post.created_at.toISOString().slice(0, 10)}
+              {post.updated_at.getTime() !== post.created_at.getTime() &&
+                ` · Updated ${post.updated_at.toISOString().slice(0, 10)}`}
             </p>
           </header>
           <div class="prose prose-gray max-w-none dark:prose-invert whitespace-pre-wrap text-gray-800 dark:text-gray-200 leading-relaxed">

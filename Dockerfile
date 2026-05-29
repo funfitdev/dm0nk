@@ -20,9 +20,6 @@ ENV NODE_ENV=production
 COPY --from=builder --chown=bun:bun /app/dist ./dist
 COPY --chown=bun:bun drizzle ./drizzle
 
-RUN mkdir -p /data && chown bun:bun /data && ln -s /data/cms.db /app/cms.db
-VOLUME ["/data"]
-
 USER bun
 EXPOSE 3000
 CMD ["bun", "dist/index.js"]

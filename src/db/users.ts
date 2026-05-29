@@ -4,19 +4,29 @@ import { eq, count as countFn } from "drizzle-orm";
 
 export type User = typeof users.$inferSelect;
 
-export function createUser(username: string, password: string): User {
+export async function createUser(
+  username: string,
+  password: string,
+): Promise<User> {
   const password_hash = Bun.password.hashSync(password);
-  return db.insert(users).values({ username, password_hash }).returning().get();
+  const [row] = await db
+    .insert(users)
+    .values({ username, password_hash })
+    .returning();
+  return row!;
 }
 
-export function findByUsername(username: string): User | null {
-  return (
-    db.select().from(users).where(eq(users.username, username)).get() ?? null
-  );
+export async function findByUsername(username: string): Promise<User | null> {
+  const [row] = await db
+    .select()
+    .from(users)
+    .where(eq(users.username, username));
+  return row ?? null;
 }
 
-export function findById(id: number): User | null {
-  return db.select().from(users).where(eq(users.id, id)).get() ?? null;
+export async function findById(id: number): Promise<User | null> {
+  const [row] = await db.select().from(users).where(eq(users.id, id));
+  return row ?? null;
 }
 
 export function verifyPassword(user: User, password: string): boolean {
@@ -24,7 +34,7 @@ export function verifyPassword(user: User, password: string): boolean {
 }
 
 // Seed a default admin user if none exist
-const result = db.select({ cnt: countFn() }).from(users).get();
-if (result && result.cnt === 0) {
-  createUser("admin", "admin");
+const [seedResult] = await db.select({ cnt: countFn() }).from(users);
+if (seedResult && Number(seedResult.cnt) === 0) {
+  await createUser("admin", "admin");
 }

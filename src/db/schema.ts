@@ -1,49 +1,51 @@
 import {
-  sqliteTable,
+  pgTable,
   text,
   integer,
+  uuid,
+  boolean,
+  timestamp,
   uniqueIndex,
-} from "drizzle-orm/sqlite-core";
-import { sql } from "drizzle-orm";
+} from "drizzle-orm/pg-core";
 
-export const users = sqliteTable("users", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const users = pgTable("users", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   username: text("username").notNull().unique(),
   password_hash: text("password_hash").notNull(),
-  created_at: text("created_at")
+  created_at: timestamp("created_at", { withTimezone: true })
     .notNull()
-    .default(sql`(datetime('now'))`),
+    .defaultNow(),
 });
 
-export const sessions = sqliteTable("sessions", {
-  id: text("id").primaryKey(),
+export const sessions = pgTable("sessions", {
+  id: uuid("id").primaryKey(),
   user_id: integer("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  expires_at: text("expires_at").notNull(),
+  expires_at: timestamp("expires_at", { withTimezone: true }).notNull(),
 });
 
-export const posts = sqliteTable("posts", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const posts = pgTable("posts", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   user_id: integer("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   slug: text("slug").notNull().unique(),
   content: text("content").notNull().default(""),
-  published: integer("published").notNull().default(0),
-  created_at: text("created_at")
+  published: boolean("published").notNull().default(false),
+  created_at: timestamp("created_at", { withTimezone: true })
     .notNull()
-    .default(sql`(datetime('now'))`),
-  updated_at: text("updated_at")
+    .defaultNow(),
+  updated_at: timestamp("updated_at", { withTimezone: true })
     .notNull()
-    .default(sql`(datetime('now'))`),
+    .defaultNow(),
 });
 
-export const postMeta = sqliteTable(
+export const postMeta = pgTable(
   "post_meta",
   {
-    id: integer("id").primaryKey({ autoIncrement: true }),
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
     post_id: integer("post_id")
       .notNull()
       .references(() => posts.id, { onDelete: "cascade" }),

@@ -4,25 +4,26 @@ import { eq } from "drizzle-orm";
 
 export type Session = typeof sessions.$inferSelect;
 
-export function createSession(userId: number): Session {
+export async function createSession(userId: number): Promise<Session> {
   const id = crypto.randomUUID();
-  const expires_at = new Date(
-    Date.now() + 7 * 24 * 60 * 60 * 1000,
-  ).toISOString();
-  db.insert(sessions).values({ id, user_id: userId, expires_at }).run();
+  const expires_at = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  await db.insert(sessions).values({ id, user_id: userId, expires_at });
   return { id, user_id: userId, expires_at };
 }
 
-export function findSession(id: string): Session | null {
-  const session = db.select().from(sessions).where(eq(sessions.id, id)).get();
+export async function findSession(id: string): Promise<Session | null> {
+  const [session] = await db
+    .select()
+    .from(sessions)
+    .where(eq(sessions.id, id));
   if (!session) return null;
-  if (new Date(session.expires_at) < new Date()) {
-    db.delete(sessions).where(eq(sessions.id, id)).run();
+  if (session.expires_at < new Date()) {
+    await db.delete(sessions).where(eq(sessions.id, id));
     return null;
   }
   return session;
 }
 
-export function deleteSession(id: string): void {
-  db.delete(sessions).where(eq(sessions.id, id)).run();
+export async function deleteSession(id: string): Promise<void> {
+  await db.delete(sessions).where(eq(sessions.id, id));
 }

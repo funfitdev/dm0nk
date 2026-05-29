@@ -118,7 +118,7 @@ export function AdminIndex({
                     </span>
                   </td>
                   <td class="px-4 py-3 text-gray-600 dark:text-gray-400">
-                    {post.created_at.slice(0, 10)}
+                    {post.created_at.toISOString().slice(0, 10)}
                   </td>
                   <td class="px-4 py-3 text-right">
                     <a
@@ -161,13 +161,13 @@ export function AdminForm({
   post?: Post;
   meta?: PostMeta[];
   error?: string;
-  values?: { title: string; slug: string; content: string; published: number };
+  values?: { title: string; slug: string; content: string; published: boolean };
 }) {
   const isEdit = !!post;
   const title = values?.title ?? post?.title ?? "";
   const slug = values?.slug ?? post?.slug ?? "";
   const content = values?.content ?? post?.content ?? "";
-  const published = values?.published ?? post?.published ?? 0;
+  const published = values?.published ?? post?.published ?? false;
   const metaItems = meta || [];
 
   const formAction = isEdit ? `/admin/posts/${post!.id}` : "/admin/posts";
@@ -232,7 +232,7 @@ export function AdminForm({
             name="published"
             value="1"
             id="published"
-            checked={published === 1}
+            checked={published}
             class="rounded border-gray-300 dark:border-gray-600"
           />
           <label

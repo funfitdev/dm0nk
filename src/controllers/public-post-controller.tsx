@@ -8,12 +8,12 @@ export async function show(req: Request) {
   const theme = getTheme(req);
   const url = new URL(req.url);
   const slug = url.pathname.split("/")[2];
-  const post = Posts.findBySlug(slug);
+  const post = await Posts.findBySlug(slug);
 
   if (!post || !post.published) {
     return new Response("Not found", { status: 404 });
   }
 
-  const meta = Posts.getMeta(post.id);
+  const meta = await Posts.getMeta(post.id);
   return render(<PublicPostView.Show post={post} meta={meta} theme={theme} />);
 }
