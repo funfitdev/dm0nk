@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Hide dropdown menu until JS positions it */
+details[data-dropdown] [data-dropdown-menu] {
+  opacity: 0;
+  pointer-events: none;
+}
+details[data-dropdown] [data-dropdown-menu][data-positioned] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Sheet slide transition */
+#sheet-panel {
+  transition: transform 0.3s ease-in-out;
+}
