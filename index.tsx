@@ -1,7 +1,7 @@
 import { routes } from "./src/routes.tsx";
 
 const server = Bun.serve({
-  port: 3000,
+  port: Number(process.env.PORT ?? 3000),
   reusePort: true,
   routes,
   fetch(req) {

@@ -1,0 +1,16 @@
+.git
+.gitignore
+node_modules
+dist
+*.db
+*.db-shm
+*.db-wal
+.env*
+.DS_Store
+README.md
+Dockerfile
+.dockerignore
+tests
+playwright.config.ts
+test-results
+playwright-report
