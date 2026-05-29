@@ -24,5 +24,5 @@ const migrateClient = postgres(url, { max: 1 });
 const db = drizzle(migrateClient);
 await migrate(db, { migrationsFolder: "./drizzle" });
 const pw = Bun.password.hashSync("admin");
-await migrateClient`INSERT INTO users (username, password_hash) VALUES ('admin', ${pw}) ON CONFLICT (username) DO NOTHING`;
+await migrateClient`INSERT INTO auth_users (username, password_hash) VALUES ('admin', ${pw}) ON CONFLICT (username) DO NOTHING`;
 await migrateClient.end();

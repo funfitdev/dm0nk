@@ -4,6 +4,7 @@ import * as AdminUsers from "@/controllers/admin/user-controller.tsx";
 import * as Auth from "@/controllers/auth-controller.tsx";
 import * as AdminPosts from "@/controllers/post-controller.tsx";
 import * as PublicPosts from "@/controllers/public-post-controller.tsx";
+import * as Zerodha from "@/controllers/zerodha-controller.tsx";
 import { parseCookie } from "@/utils/cookie.tsx";
 
 export const routes = {
@@ -13,6 +14,11 @@ export const routes = {
     POST: Auth.login,
   },
   "/logout": { POST: Auth.logout },
+
+  // Zerodha OAuth + sync
+  "/zerodha/access-token": Zerodha.start,
+  "/zerodha/callback": Zerodha.callback,
+  "/zerodha/instruments/sync": { POST: Zerodha.syncInstruments },
 
   // Public posts
   "/posts/:slug": PublicPosts.show,
